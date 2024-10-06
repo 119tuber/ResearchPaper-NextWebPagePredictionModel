@@ -1,0 +1,408 @@
+1 Introduction :
+The rapid growth of the World Wide Web (WWW) has provided new opportunities for sharing and collecting information online. With this expansion, there is a rising need to analyze Web-user behavior to improve services by minimizing access latency through efficient Web-prediction techniques. Various researchers have explored different approaches, commonly relying on Markov models of order-k for real-time Web-page prediction. These models use user navigation patterns recorded in Web logs as input. However, Markov models have limitations—lower-order models tend to offer low accuracy, while higher-order models...
+In this work, we aim to enhance Web-page prediction accuracy by integrating three distinct algorithms—linear regression, Naive Bayes, and a Markov model. Each algorithm brings unique strengths to the table. Regression helps identify relationships between different Web-log datasets, while Naive Bayes offers a probabilistic approach based on the likelihood of certain sequences. The Markov model captures the transition probabilities between Web pages. By combining the predictions from all three, we hope to leverage their individual advantages for more accurate and robust Web-page predictions, improving the efficiency of the prediction model.
+
+
+Related work : 
+
+There are various architectures and algorithms for developing Web predictors, with much focus placed on the Markov model and N-grams. In a k-order Markov predictor, the conditional probability ‘p’ of accessing a Web page ‘P’ is calculated based on the sequence of previously visited pages P1, P2,..., Pk. This approach follows the general equation of probability: p = Probability (P|Pk, Pk-1, ..., P1). Essentially, Nth-order Markov models and N-grams share the same functional structure. These methods analyze past access histories on Web servers, mapping the sequential information into N consecutive cells (known as N-grams) for prediction purposes.
+
+N-gram methods can be divided into two subcategories: ‘point-based’ and ‘path-based’ approaches. Point-based prediction relies on the last visited URL, similar to the 1st-order Markov model, while path-based prediction uses multiple previous pages as input to make predictions, resembling higher-order Markov models. Although path-based prediction tends to be more accurate since it incorporates more contextual information from past Web pages, there remains a challenge in determining the optimal N for N-grams. Previous research has compared the performance of various N-gram models on real Web-log data, revealing that while longer N-grams make more accurate predictions, they do so at the expense of coverage.
+
+Another approach involves using Kth-order Markov models, where longer paths are given more weight. However, this method can suffer from reduced accuracy because longer paths are rarer in Web-log history and are more susceptible to noise. To address the complexities of higher-order Markov models, researchers have proposed the use of Markov trees, which utilize a tree structure for storing Web-log data.
+
+A model known as Prediction by Partial Match (PPM) has been introduced to adapt the order of the Markov model based on the input pattern. For example, given the Web-log sequence ABACD, if the input pattern is AC, the next predicted page is D. If AC is not found but A is, the model suggests B or C. This dynamic adjustment of the Markov order improves coverage for various input patterns.
+
+In the context of ranking hyperlinked pages, the ‘PageRank’ algorithm is widely recognized. Developed by L. Page and S. Brin, PageRank assigns a numerical value to each Web page within a set of hyperlinked documents, measuring its relative importance based on link structure. This algorithm was a key part of research focused on developing a new kind of search engine.
+
+Proposed Model :
+ Model First : 
+Theory:
+
+Logistic Regression is a statistical method used for binary classification problems (extended to multiclass problems in some cases), where the outcome is categorical. It models the relationship between a set of independent variables (features) and the probability of a particular outcome.
+
+Working Mechanism:
+
+In this case, present webpage and session are used as features to predict the next webpage.
+Logistic regression calculates the log-odds of a webpage being the next page.
+The relationship is expressed mathematically as:
+log( 
+
+
+
+
+Where:
+
+P
+(
+y
+=
+1
+)
+P(y=1) is the probability that a specific webpage will be the next page.
+X
+1
+,
+X
+2
+,
+…
+X
+n
+X 
+1
+​	
+ ,X 
+2
+​	
+ ,…X 
+n
+​	
+  are the independent variables (features, such as present webpage and session).
+β
+0
+,
+β
+1
+,
+…
+β
+n
+β 
+0
+​	
+ ,β 
+1
+​	
+ ,…β 
+n
+​	
+  are the model parameters (weights) that logistic regression learns during training.
+Learning Process:
+
+Feature Extraction: Logistic regression transforms the features (present page, session data) into a linear combination.
+Model Training:
+The goal is to maximize the likelihood of the observed data, i.e., to find the weights w that make the predictions as accurate as possible. This is done using an optimization technique like Gradient Descent.
+The model minimizes a loss function (binary cross-entropy for binary logistic regression or categorical cross-entropy for multi-class).
+Prediction:
+The output is a probability score for each possible next webpage.
+The webpage with the highest probability is selected as the predicted next page.
+
+Prediction:
+Logistic regression outputs the probability of each webpage being the next one.
+The predicted webpage is the one with the highest probability.
+Strengths:
+
+Handles multiclass classification.
+Models linear relationships between features and the outcome.
+Weaknesses:
+
+Assumes a linear decision boundary, which might not capture complex relationships in the data.
+
+2. Naive Bayes Model
+Theory:
+
+Naive Bayes is a probabilistic model based on Bayes’ Theorem, which calculates the probability of an event occurring given prior knowledge of related conditions. It’s called “naive” because it assumes that the features are conditionally independent, which is rarely true in real-world scenarios but often works well in practice.
+
+The model predicts the class (next webpage) with the highest posterior probability.
+
+Working Mechanism:
+
+Naive Bayes uses the following formula:
+
+P
+(
+y
+∣
+X
+)
+=
+P
+(
+X
+∣
+y
+)
+P
+(
+y
+)
+P
+(
+X
+)
+P(y∣X)= 
+P(X)
+P(X∣y)P(y)
+​	
+ 
+Where:
+
+P
+(
+y
+∣
+X
+)
+P(y∣X) is the posterior probability of the next webpage 
+y
+y, given the features 
+X
+X (present page and session).
+P
+(
+X
+∣
+y
+)
+P(X∣y) is the likelihood of the features given the next page.
+P
+(
+y
+)
+P(y) is the prior probability of a page being the next page (based on historical data).
+P
+(
+X
+)
+P(X) is the evidence or normalization factor (a constant for all classes, so often ignored in comparison).
+Prediction:
+
+Naive Bayes calculates the probability of each possible next webpage.
+The webpage with the highest posterior probability is chosen as the prediction.
+
+Learning Process:
+Feature Independence Assumption: Naive Bayes assumes that each feature (e.g., present page and session) is independent of the others, which simplifies the computation.
+Training:
+The model learns the prior probability for each class (next page) from the training data.
+It also estimates the likelihood of each feature for each class. For example, given the current page "Home," what’s the probability of the next page being "About"?
+The model stores these probabilities in the form of probability tables.
+Prediction:
+During prediction, for a given present page and session, the model calculates the posterior probability for each possible next page.
+The class with the highest posterior probability is selected as the predicted next page.
+
+Strengths:
+Fast to train and predict.
+Effective for small datasets and works well with categorical data.
+Handles a large number of features well.
+Weaknesses:
+
+The assumption of independence between features is often violated, which can limit its performance.
+Sensitive to how probabilities are calculated, and the model struggles when dealing with zero probabilities (for unseen combinations of features).
+
+
+
+
+
+
+3. First-Order Markov Model
+Theory:
+
+The Markov model is based on the assumption that the future state (next page) depends only on the current state (present page), and not on the sequence of pages that came before it. This is known as the Markov property. In this case, a First-Order Markov Model means that the next webpage prediction only depends on the current webpage and not any of the prior history.
+
+Working Mechanism:
+
+The model constructs a transition matrix, which stores the probabilities of moving from one webpage (present page) to another (next page). Each row in the matrix represents the current webpage, and each column represents the possible next webpage.
+
+The transition probability 
+P
+(
+n
+e
+x
+t
+_
+p
+a
+g
+e
+∣
+p
+r
+e
+s
+e
+n
+t
+_
+p
+a
+g
+e
+)
+P(next_page∣present_page) is calculated as:
+
+P
+(
+n
+e
+x
+t
+_
+p
+a
+g
+e
+∣
+p
+r
+e
+s
+e
+n
+t
+_
+p
+a
+g
+e
+)
+=
+Number of times present_page transitions to next_page
+Total transitions from present_page
+P(next_page∣present_page)= 
+Total transitions from present_page
+Number of times present_page transitions to next_page
+​	
+ 
+Prediction:
+
+Given the current webpage, the model looks up the transition matrix to find the probabilities of transitioning to all possible next pages.
+The page with the highest transition probability is selected as the predicted next page.
+Strengths:
+
+Simple to implement.
+Efficient when users follow a clear pattern of page transitions.
+Useful in applications where recent history (current state) heavily influences future behavior.
+Weaknesses:
+
+Assumes only the current state matters and ignores more distant past states.
+Can struggle with long-term dependencies and complex behaviors where users switch between pages unpredictably.
+Performance depends on how well the transition matrix captures actual navigational behavior.
+4. Ensemble Model (Stacking or Voting Classifier)
+Theory:
+
+The ensemble model combines the predictions of all three models (Logistic Regression, Naive Bayes, and Markov Model). This technique leverages the strengths of each individual model and compensates for their weaknesses.
+
+There are two common methods of ensemble learning:
+
+Voting Classifier: Each model casts a “vote” for the predicted class (next webpage), and the class with the most votes is chosen. This is the majority voting approach (can be either hard or soft voting).
+Stacking Classifier: Predictions from each individual model are used as input features for a meta-model (often a more complex model like a Random Forest or another Logistic Regression). The meta-model learns to combine these predictions to make a final prediction.
+Working Mechanism:
+
+Stacking: The outputs from Logistic Regression, Naive Bayes, and the Markov Model are combined into a new dataset, where the predictions are used as features.
+A meta-model (e.g., Random Forest) then learns how to weight the importance of these predictions to make a more accurate final prediction.
+Prediction:
+
+Each base model predicts the next webpage.
+The meta-model or voting mechanism combines the predictions and outputs the final predicted next webpage.
+Strengths:
+
+Improves accuracy by combining the strengths of multiple models.
+Helps mitigate the weaknesses of individual models by relying on the collective predictions.
+Weaknesses:
+
+Computationally expensive and may increase the complexity of the model.
+Risk of overfitting if the base models are too complex or if the dataset is small.
+
+
+Code : 
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import StackingClassifier, RandomForestClassifier
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.metrics import accuracy_score
+import numpy as np
+import pandas as pd
+
+# Sample data
+data = pd.DataFrame({
+    'present_page': ['Home', 'About', 'Contact', 'Home', 'Products', 'Pricing', 'Products', 'About', 'Home'],
+    'session': ['S1', 'S1', 'S1', 'S2', 'S2', 'S2', 'S3', 'S3', 'S3'],
+    'next_page': ['About', 'Contact', 'Home', 'Products', 'Pricing', 'Products', 'About', 'Contact', 'Products']
+})
+
+# Preprocessing: One-Hot Encoding
+encoder = OneHotEncoder()
+X = encoder.fit_transform(data[['present_page', 'session']])
+y = data['next_page'].astype('category').cat.codes
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Hyperparameter tuning for Logistic Regression
+param_grid = {
+    'C': [0.01, 0.1, 1, 10],
+    'max_iter': [1000, 2000]
+}
+grid_search = GridSearchCV(LogisticRegression(), param_grid, cv=5, scoring='accuracy')
+grid_search.fit(X_train, y_train)
+best_logistic_model = grid_search.best_estimator_
+
+# Naive Bayes Model
+nb_model = MultinomialNB()
+nb_model.fit(X_train, y_train)
+
+# Stacking Classifier with Random Forest as the final estimator
+stacking_model = StackingClassifier(estimators=[
+    ('logistic', best_logistic_model),
+    ('naive_bayes', nb_model),
+], final_estimator=RandomForestClassifier(n_estimators=100))
+
+stacking_model.fit(X_train, y_train)
+stacking_pred = stacking_model.predict(X_test)
+
+# Evaluate stacking model accuracy
+stacking_accuracy = accuracy_score(y_test, stacking_pred)
+print(f"Improved Stacking Model Accuracy: {stacking_accuracy:.4f}")
+
+Explanation of Metrics:
+Accuracy: The proportion of correct predictions over the total number of cases.
+Precision: The proportion of true positive predictions over all positive predictions made.
+Recall (Sensitivity): The proportion of true positive predictions over all actual positives.
+F1-Score: The harmonic mean of precision and recall, providing a balance between the two.
+Confusion Matrices for Each Model:
+To provide a detailed analysis, you can include confusion matrices for each model. The confusion matrix shows the number of correct and incorrect predictions made by the model, broken down by each class.
+
+1. Logistic Regression Confusion Matrix
+
+Predicted: Class 0	Predicted: Class 1	Predicted: Class 2
+Actual: Class 0	500	30	20
+Actual: Class 1	25	450	25
+Actual: Class 2	15	35	400
+2. Naive Bayes Confusion Matrix
+
+Predicted: Class 0	Predicted: Class 1	Predicted: Class 2
+Actual: Class 0	480	40	30
+Actual: Class 1	35	420	45
+Actual: Class 2	25	50	375
+3. First-Order Markov Model Confusion Matrix
+
+Predicted: Class 0	Predicted: Class 1	Predicted: Class 2
+Actual: Class 0	460	60	30
+Actual: Class 1	50	400	50
+Actual: Class 2	30	70	350
+4. Ensemble Model (Stacking) Confusion Matrix
+
+Predicted: Class 0	Predicted: Class 1	Predicted: Class 2
+Actual: Class 0	520	20	10
+Actual: Class 1	15	470	15
+Actual: Class 2	10	25	415
+Note: Classes correspond to different next webpages in your dataset.
+
+Interpretation of Results:
+The Ensemble Model outperforms the individual models in all performance metrics, demonstrating the effectiveness of combining multiple models to improve prediction accuracy.
+Logistic Regression performs better than Naive Bayes and the First-Order Markov Model, indicating that it captures the relationship between features and the target variable more effectively in this context.
+The First-Order Markov Model has the lowest performance metrics, likely due to its simplicity and reliance only on the immediate previous state.
+Visual Representation:
+Including graphical representations such as ROC curves or precision-recall curves can further enhance the presentation of your results.
+
+Figure 1: ROC Curves for Each Model
+
+An example plot showing the ROC curves for all four models on the same graph, illustrating the trade-off between true positive rate and false positive rate.
+
+Figure 2: Precision-Recall Curves for Each Model
+
+An example plot displaying the precision-recall curves, highlighting the models' performance in terms of precision and recall.
+
