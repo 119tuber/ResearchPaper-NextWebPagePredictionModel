@@ -363,8 +363,7 @@ Precision: The proportion of true positive predictions over all positive predict
 Recall (Sensitivity): The proportion of true positive predictions over all actual positives.
 F1-Score: The harmonic mean of precision and recall, providing a balance between the two.
 Confusion Matrices for Each Model:
-To provide a detailed analysis, you can include confusion matrices for each model. The confusion matrix shows the number of correct and incorrect predictions made by the model, broken down by each class.
-
+To provide a detailed analysis, you can include confusion matrices for each model. The confusion matrix shows the number of correct and incorrect predictions made by the model, broken down by each class.z
 1. Logistic Regression Confusion Matrix
 
 Predicted: Class 0	Predicted: Class 1	Predicted: Class 2
